@@ -1,5 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const mongoose = require("mongoose");
 const keys = require("../config/keys");
 
@@ -32,6 +33,32 @@ passport.use(
 					});
 				}
 			});
+		}
+	)
+);
+
+passport.use(
+	new FacebookStrategy(
+		{
+			clientID: keys.facebookClientID,
+			clientSecret: keys.facebookClientSecret,
+			callbackURL: "/auth/facebook/callback",
+			profileFields: ["id", "email"]
+		},
+		(accessToken, refreshToken, profile, done) => {
+			console.log(accessToken);
+			console.log(refreshToken);
+			console.log(profile);
+			
+			// User.findOne({ googleId: profile.id }).then((existingUser) => {
+			// 	if (existingUser) {
+			// 		done(null, existingUser);
+			// 	} else {
+			// 		new User({ googleId: profile.id }).save().then((user) => {
+			// 			done(null, user);
+			// 		});
+			// 	}
+			// });
 		}
 	)
 );
